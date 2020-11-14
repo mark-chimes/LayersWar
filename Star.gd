@@ -1,5 +1,6 @@
 extends Node2D
 
+signal selected(selection_position)
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -19,11 +20,14 @@ func _unhandled_input(event):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if Input.is_action_just_pressed('walk_down'):
-		if is_selected:
+	if Input.is_action_just_pressed('walk_down') and is_selected:
 			$star_black.visible = false
 			$star_yellow.visible = false
 			$star_blue.visible = true
+			
+	if Input.is_action_just_released('walk_down') and is_selected:
+		emit_signal("selected", position)
+		queue_free()
 
 func _on_Area2D_area_entered(area):
 	is_selected = true
