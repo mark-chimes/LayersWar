@@ -20,9 +20,9 @@ func _process(delta):
 			velocity.x -= 1
 		velocity = velocity.normalized() * speed
 		
-		if velocity.x < -1: 
+		if velocity.x < -0.5: 
 			$AnimatedSprite.flip_h = true
-		elif velocity.x > 1: 
+		elif velocity.x > 0.5: 
 			$AnimatedSprite.flip_h = false
 
 		if velocity.length() > 0: 
