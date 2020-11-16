@@ -154,7 +154,7 @@ collision_mask = 2
 shape = SubResource( 2 )
 
 [node name="Knight" parent="Star" instance=ExtResource( 14 )]
-position = Vector2( 0, 24 )
+position = Vector2( 0, 16 )
 velocity = 40
 
 [node name="Player" type="Node2D" parent="."]
@@ -164,7 +164,7 @@ script = ExtResource( 5 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="Player"]
 frames = SubResource( 9 )
-frame = 3
+frame = 2
 playing = true
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -178,7 +178,7 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/PlayerArea"]
 position = Vector2( 0, 4 )
 shape = SubResource( 10 )
-[connection signal="selected" from="Star" to="BuildingSpawner" method="_on_Star_selected"]
 [connection signal="selected" from="Star" to="Star" method="_on_Star_selected"]
+[connection signal="selected" from="Star" to="BuildingSpawner" method="_on_Star_selected"]
 [connection signal="area_entered" from="Star/Area2D" to="Star" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Star/Area2D" to="Star" method="_on_Area2D_area_exited"]

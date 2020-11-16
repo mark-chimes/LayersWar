@@ -6,12 +6,12 @@
 [node name="UnitTest" type="Node2D"]
 
 [node name="Imdead" parent="." instance=ExtResource( 1 )]
-position = Vector2( 460, 192 )
+position = Vector2( 352, 192 )
 scale = Vector2( -1, 1 )
 velocity = -20
 
 [node name="Knight" parent="." instance=ExtResource( 2 )]
-position = Vector2( 156, 192 )
+position = Vector2( 272, 192 )
 velocity = 40
 
 [node name="Camera2D" type="Camera2D" parent="."]
