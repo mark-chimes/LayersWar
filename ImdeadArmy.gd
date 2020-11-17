@@ -7,16 +7,16 @@ extends Node2D
 var units_array = []
 var imdead = load("res://Imdead.tscn")
 
+export var num_units_to_spawn = 6
+export var distance_between_spawned = 40
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$goblin.visible = false
 	# TODO base yourself on the position of the front unit, if they exist
-	create_imdead("Imdead1", Vector2(0,0) )
-	create_imdead("Imdead2", Vector2(40,0))
-	create_imdead("Imdead3", Vector2(80,0))
-	create_imdead("Imdead4", Vector2(120,0))
-	create_imdead("Imdead5", Vector2(160,0))
-	create_imdead("Imdead6", Vector2(200,0))
+	
+	for i in range(0, num_units_to_spawn):
+		create_imdead("Imdead" + str(i), Vector2(i*distance_between_spawned,0))
 		
 func create_imdead(unit_name, unit_pos):
 	var imdead_instance = imdead.instance()

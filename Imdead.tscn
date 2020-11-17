@@ -394,7 +394,7 @@ script = ExtResource( 4 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 72 )
 animation = "idle"
-frame = 1
+frame = 10
 playing = true
 
 [node name="ImdeadArea2D" type="Area2D" parent="."]
