@@ -11,7 +11,7 @@
 [ext_resource path="res://Resources/Star-blue.png" type="Texture" id=9]
 [ext_resource path="res://Resources/star-yellow.png" type="Texture" id=10]
 [ext_resource path="res://Spawner.gd" type="Script" id=11]
-[ext_resource path="res://Resources/Boulder.png" type="Texture" id=12]
+[ext_resource path="res://SkeletonSpawner.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ImdeadArmy.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Knight.tscn" type="PackedScene" id=14]
 
@@ -89,17 +89,15 @@ position = Vector2( 96, 80 )
 [node name="BuildingSpawner" type="Node2D" parent="."]
 script = ExtResource( 11 )
 
-[node name="GoblinSpawner" type="Node2D" parent="."]
-position = Vector2( 840, 324 )
-z_index = 2
+[node name="SkeletonSpawner" parent="." instance=ExtResource( 12 )]
+position = Vector2( 840, 336 )
+z_index = 1
 
-[node name="Boulder" type="Sprite" parent="GoblinSpawner"]
-texture = ExtResource( 12 )
-
-[node name="ImdeadArmy" parent="GoblinSpawner" instance=ExtResource( 13 )]
-position = Vector2( 0, 12 )
+[node name="ImdeadArmy" parent="." instance=ExtResource( 13 )]
+position = Vector2( 840, 336 )
 
 [node name="Background" type="Node2D" parent="."]
+z_index = -5
 __meta__ = {
 "_edit_lock_": true
 }
@@ -174,6 +172,7 @@ shape = SubResource( 10 )
 [node name="Knight" parent="." instance=ExtResource( 14 )]
 position = Vector2( 384, 336 )
 velocity = 40
+[connection signal="register_army" from="ImdeadArmy" to="SkeletonSpawner" method="_on_ImdeadArmy_register_army"]
 [connection signal="selected" from="Star" to="Star" method="_on_Star_selected"]
 [connection signal="selected" from="Star" to="BuildingSpawner" method="_on_Star_selected"]
 [connection signal="area_entered" from="Star/Area2D" to="Star" method="_on_Area2D_area_entered"]

@@ -340,7 +340,7 @@ script = ExtResource( 4 )
 position = Vector2( 0, 4 )
 frames = SubResource( 61 )
 animation = "idle"
-frame = 11
+frame = 7
 playing = true
 
 [node name="KnightArea2D" type="Area2D" parent="."]

@@ -7,28 +7,39 @@ extends Node2D
 var units_array = []
 var imdead = load("res://Imdead.tscn")
 
-export var num_units_to_spawn = 6
+signal register_army(army)
+
+export var num_units_to_spawn = 2
 export var distance_between_spawned = 40
+
+var unit_num = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$goblin.visible = false
-	# TODO base yourself on the position of the front unit, if they exist
+	emit_signal("register_army", self)
+	
+	print("Position: " + str(get_position()))
+	print("Global position: " + str(global_position))
 	
 	for i in range(0, num_units_to_spawn):
-		create_imdead("Imdead" + str(i), Vector2(i*distance_between_spawned,0))
+		create_imdead(global_position + Vector2(i*distance_between_spawned,0))
 		
-func create_imdead(unit_name, unit_pos):
+func create_imdead(unit_pos):
+
 	var imdead_instance = imdead.instance()
-	imdead_instance.set_name(unit_name)
+	imdead_instance.set_name("Imdead" + str(unit_num))
+	print("Creating imdead " + imdead_instance.get_name())
 	add_child(imdead_instance)
-	imdead_instance.position = unit_pos
+	imdead_instance.position = unit_pos - global_position
 	imdead_instance.scale = Vector2( -1, 1 )
 	imdead_instance.velocity = -20
 	imdead_instance.z_index = 1
 	imdead_instance.connect("encounter_enemy", self, "_on_Imdead_encounter_enemy")
 	imdead_instance.connect("death", self, "_on_Imdead_death")
 	units_array.append(imdead_instance)
+	print("Units array size after creation: " + str(units_array.size()))
+	unit_num += 1
 
 func _on_Imdead_encounter_enemy(identity):
 #	print("Encountered enemy: " + identity.get_name())
@@ -39,6 +50,7 @@ func _on_Imdead_encounter_enemy(identity):
 	
 	var base_pos = front_unit.position.x
 	print("Base pos: " + str(base_pos))
+	print("Num units: " + str(units_array.size()))
 	
 	var i = 0
 	for unit in units_array:

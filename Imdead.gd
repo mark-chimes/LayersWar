@@ -60,7 +60,7 @@ func walk():
 	
 func walk_to_desired(given_desired_x_pos): 
 	desired_x_pos = given_desired_x_pos
-	print("Unit " + get_name() + " position " + str(position.x) + " / " + str(desired_x_pos))
+	# print("Unit " + get_name() + " position " + str(position.x) + " / " + str(desired_x_pos))
 	is_walking_to_desired = true
 	desired_x_pos = given_desired_x_pos
 
