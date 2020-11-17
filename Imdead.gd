@@ -1,10 +1,18 @@
 extends Node2D
 
-signal encounter_enemy(identity)
+signal encounter_enemy(identity, enemy)
 signal death(identity)
 
 enum Direction { 
 	LEFT, RIGHT
+}
+
+enum MacroState { 
+	LEAD_COMBAT,
+	WAIT_COMBAT,
+	LEAD_MARCH,
+	FOLLOW_MARCH,
+	DIE
 }
 
 enum State {
@@ -14,15 +22,15 @@ enum State {
 	IDLE
 }
 
+export var hp = 2
+
 export var velocity = 10
 export var army_direction = Direction.LEFT
 
+var macro_state = MacroState.LEAD_MARCH
 var state = State.WALK
 var direction = Direction.LEFT
 
-var is_walking_to_desired = false
-
-var is_marching_to_desired = false
 var march_index = 0
 var march_leader = null
 var desired_x_pos = 0
@@ -30,11 +38,14 @@ var desired_x_pos = 0
 var epsilon = 4
 
 
-func _ready():	
+func _ready():
 	walk()
 
 func _process(delta):
-	if is_walking_to_desired:
+	if macro_state == MacroState.DIE:
+		return
+		
+	if macro_state == MacroState.WAIT_COMBAT:
 		if abs(position.x - desired_x_pos) > epsilon:
 			if position.x > desired_x_pos:
 				direction = Direction.LEFT
@@ -44,10 +55,9 @@ func _process(delta):
 		else: 
 			direction = army_direction
 			idle()
-	else: 
-		direction = army_direction
-
-	if is_marching_to_desired: 
+	elif macro_state == MacroState.FOLLOW_MARCH:
+		if march_leader == null: 
+			print("MARCH LEADER FOR " + get_name() + " IS NULL ")
 		if army_direction == Direction.LEFT: 
 			desired_x_pos = march_leader.position.x + march_index*32
 			if abs(position.x - desired_x_pos) > epsilon:
@@ -57,7 +67,7 @@ func _process(delta):
 				else: # walking left, too far left, run into position
 					direction = Direction.RIGHT 
 					walk()
-		if army_direction == Direction.RIGHT:  
+		elif army_direction == Direction.RIGHT:  
 			desired_x_pos = march_leader.position.x - march_index*32
 			if abs(position.x - desired_x_pos) > epsilon:
 				if position.x > desired_x_pos: # walking right, too far right, run into position
@@ -78,54 +88,55 @@ func _process(delta):
 
 func _on_Area2D_area_entered(area):
 	var area_name = area.get_name()
+	var enemy = area.get_parent()
 	if area_name == "KnightArea2D":
-		emit_signal("encounter_enemy", self)
+		emit_signal("encounter_enemy", self, enemy)
 #	elif area_name == "ImdeadArea2D" and state == State.WALK:
 #		idle()
 		
 func _on_AnimatedSprite_animation_finished():
 	if state == State.ATTACK:
-		die()
+		hp -= 1
+		if hp <= 0:
+			die()
 	elif state == State.DIE:
 		queue_free()
 
 func idle(): 
-#	print(get_name() + " is idle")
 	$AnimatedSprite.play("idle")
 	state = State.IDLE
-
+	
 func attack(): 
-#	print(get_name() + " is attacking")
 	$AnimatedSprite.play("attack")
 	state = State.ATTACK
+	macro_state = MacroState.LEAD_COMBAT
 
 func walk(): 
-#	print(get_name() + " is walking")
 	$AnimatedSprite.play("walk")
 	state = State.WALK
 	
 func walk_to_desired(given_desired_x_pos): 
 	desired_x_pos = given_desired_x_pos
 	# print("Unit " + get_name() + " position " + str(position.x) + " / " + str(desired_x_pos))
-	is_walking_to_desired = true
+	macro_state = MacroState.WAIT_COMBAT
 	desired_x_pos = given_desired_x_pos
 
 func march(): 
-	is_walking_to_desired = false
-	is_marching_to_desired = false
+	macro_state = MacroState.LEAD_MARCH
 	walk()
 
 func march_with(front_unit, my_index):
-	is_walking_to_desired = false
-	is_marching_to_desired = true
+	if front_unit == null: 
+		print(get_name() + " was told to follow a null unit ")
+	macro_state = MacroState.FOLLOW_MARCH
 	march_leader = front_unit
 	march_index = my_index
 	walk()
 
 func die(): 
-#	print(get_name() + " is dying")
 	$AnimatedSprite.play("death")
 	state = State.DIE
+	macro_state = MacroState.DIE
 	emit_signal("death", self)
 
 # DEBUG

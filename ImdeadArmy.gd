@@ -20,6 +20,7 @@ var units_array = []
 var imdead = load("res://Imdead.tscn")
 var front_march_unit
 var front_attack_unit
+var cur_enemy
 
 signal register_army(army)
 
@@ -33,10 +34,6 @@ func _ready():
 	state = State.MARCH
 	$goblin.visible = false
 	emit_signal("register_army", self)
-	
-	print("Position: " + str(get_position()))
-	print("Global position: " + str(global_position))
-	
 	for i in range(0, num_units_to_spawn):
 		create_imdead(global_position + Vector2(i*distance_between_spawned,0))
 		
@@ -70,29 +67,43 @@ func create_imdead(unit_pos):
 			imdead_instance.march()
 			front_march_unit = imdead_instance
 
-func _on_Imdead_encounter_enemy(identity):
+func _on_Imdead_encounter_enemy(identity, enemy):
+	cur_enemy = enemy
+	enemy.connect("knight_die", self, "_on_knight_death")
 	if state != State.ATTACK:
-		state = State.ATTACK
-		front_attack_unit = units_array.pop_front()
-		front_attack_unit.attack()
-		var base_pos = front_attack_unit.position.x
-			
-		var i = 0
-		for unit in units_array:
-			i += 1
-			var desired_pos = base_pos + 32*i
-			unit.walk_to_desired(desired_pos)
+		start_attacking()
+
+func start_attacking():
+	state = State.ATTACK
+	front_attack_unit = units_array.front()
+	front_attack_unit.attack()
 	
+	var base_pos = front_attack_unit.position.x
+	
+	var i = -1
+	for unit in units_array:
+		i += 1
+		if i == 0:
+			continue
+		var desired_pos = base_pos + 32*i
+		unit.walk_to_desired(desired_pos)
+
 func _on_Imdead_death(identity):
+	cur_enemy.on_skeleton_death()
 	units_array.remove(units_array.find(identity))
-	if state != State.MARCH:
-		state = State.MARCH
-		front_march_unit = units_array.pop_front()
-		front_march_unit.march()
-		var i = 0
-		for unit in units_array:
-			i += 1
-			unit.march_with(front_march_unit, i)
-		units_array.push_front(front_march_unit)
+	start_attacking()
+
+func start_marching(): 
+	state = State.MARCH
+	front_march_unit = units_array.front()
+	front_march_unit.march()
+	var i = -1
+	for unit in units_array:
+		i += 1
+		if i == 0:
+			continue
+		unit.march_with(front_march_unit, i)
 
 # TODO What happens when they kill the enemy without losing a unit?!
+func _on_knight_death():
+	start_marching()

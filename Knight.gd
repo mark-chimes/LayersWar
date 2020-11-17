@@ -1,9 +1,11 @@
 extends Node2D
 
+signal knight_die
+
 export var velocity = 10
 var cur_velocity
 
-export var hp = 5
+export var hp = 3
 
 enum State {
 	WALK,
@@ -29,12 +31,14 @@ func _on_Area2D_area_entered(area):
 func _on_AnimatedSprite_animation_finished():
 	if state == State.ATTACK:
 		hp -= 1
-		if hp > 0:
-			$AnimatedSprite.play("walk")
-			state = State.WALK
-		else: 
+		if hp <= 0:
 			$AnimatedSprite.play("death")
 			state = State.DIE
+			emit_signal("knight_die")
 			$KnightArea2D.queue_free()
 	elif state == State.DIE:
 		queue_free()
+
+func on_skeleton_death():
+	$AnimatedSprite.play("walk")
+	state = State.WALK
