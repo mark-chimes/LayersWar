@@ -3,7 +3,9 @@ extends Node2D
 signal encounter_enemy(identity)
 signal death(identity)
 
-export var velocity = 10
+enum Direction { 
+	LEFT, RIGHT
+}
 
 enum State {
 	WALK,
@@ -12,23 +14,42 @@ enum State {
 	IDLE
 }
 
+export var velocity = 10
+export var army_direction = Direction.LEFT
+
 var state = State.WALK
+var direction = Direction.LEFT
 
 var is_walking_to_desired = false
 var desired_x_pos = 0
 
-func _ready():
+var epsilon = 4
+
+func _ready():	
 	walk()
 
 func _process(delta):
 	if is_walking_to_desired:
-		if position.x > desired_x_pos:
+		if abs(position.x - desired_x_pos) > 4:
+			if position.x > desired_x_pos:
+				direction = Direction.LEFT
+			else: 
+				direction = Direction.RIGHT
 			walk()
 		else: 
+			direction = army_direction
 			idle()
-	
-	if state == State.WALK:
-		position.x = position.x + velocity*delta
+	else: 
+		direction = army_direction
+
+	if direction == Direction.LEFT:
+		$AnimatedSprite.flip_h = true
+		if state == State.WALK:
+			position.x = position.x - velocity*delta
+	elif direction == Direction.RIGHT:
+		$AnimatedSprite.flip_h = false
+		if state == State.WALK:
+			position.x = position.x + velocity*delta
 
 func _on_Area2D_area_entered(area):
 	var area_name = area.get_name()
@@ -73,3 +94,7 @@ func die():
 	$AnimatedSprite.play("death")
 	state = State.DIE
 	emit_signal("death", self)
+
+# DEBUG
+func _on_ImdeadArea2D_mouse_entered():
+	print("Mouse on " + get_name())

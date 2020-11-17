@@ -394,7 +394,7 @@ script = ExtResource( 4 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 72 )
 animation = "idle"
-frame = 15
+frame = 14
 playing = true
 
 [node name="ImdeadArea2D" type="Area2D" parent="."]
@@ -404,3 +404,4 @@ position = Vector2( 0, 4 )
 shape = SubResource( 73 )
 [connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
 [connection signal="area_entered" from="ImdeadArea2D" to="." method="_on_Area2D_area_entered"]
+[connection signal="mouse_entered" from="ImdeadArea2D" to="." method="_on_ImdeadArea2D_mouse_entered"]

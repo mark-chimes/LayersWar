@@ -10,10 +10,11 @@
 position = Vector2( 448, 192 )
 
 [node name="ImdeadArmy" parent="." instance=ExtResource( 1 )]
-position = Vector2( 448, 192 )
+position = Vector2( 352, 192 )
+num_units_to_spawn = 4
 
 [node name="Knight" parent="." instance=ExtResource( 2 )]
-position = Vector2( 96, 192 )
+position = Vector2( 264, 192 )
 velocity = 40
 
 [node name="Camera2D" type="Camera2D" parent="."]
