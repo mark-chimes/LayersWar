@@ -1,0 +1,7 @@
+For army attacking: 
+ - Each army has a leading unit and a bunch of units following
+ - The army has a collision box at its front
+ - When the army's collision box hits an enemy army's collision box, it goes to attack mode
+ - When the army attacks, its front unit attacks and the rest of the units idle
+ - When the front unit is dead, the next unit moves into place 
+ 

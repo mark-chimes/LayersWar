@@ -3,6 +3,8 @@ extends Node2D
 export var velocity = 10
 var cur_velocity
 
+var hp = 2
+
 enum State {
 	RUN,
 	ATTACK,
@@ -26,5 +28,12 @@ func _on_Area2D_area_entered(area):
 
 func _on_AnimatedSprite_animation_finished():
 	if state == State.ATTACK:
-		$AnimatedSprite.play("idle")
-		state = State.IDLE
+		hp -= 1
+		if hp > 0:
+			$AnimatedSprite.play("idle")
+			state = State.IDLE
+		else: 
+			$AnimatedSprite.play("death")
+			state = State.DIE
+	elif state == State.DIE:
+		queue_free()
