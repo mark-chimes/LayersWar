@@ -330,7 +330,8 @@ animations = [ {
 } ]
 
 [sub_resource type="CapsuleShape2D" id=62]
-height = 12.0
+radius = 16.0
+height = 8.0
 
 [node name="Knight" type="Node2D"]
 script = ExtResource( 4 )
@@ -339,7 +340,7 @@ script = ExtResource( 4 )
 position = Vector2( 0, 4 )
 frames = SubResource( 61 )
 animation = "idle"
-frame = 2
+frame = 5
 playing = true
 
 [node name="KnightArea2D" type="Area2D" parent="."]

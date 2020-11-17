@@ -12,7 +12,7 @@
 [ext_resource path="res://Resources/star-yellow.png" type="Texture" id=10]
 [ext_resource path="res://Spawner.gd" type="Script" id=11]
 [ext_resource path="res://Resources/Boulder.png" type="Texture" id=12]
-[ext_resource path="res://Imdead.tscn" type="PackedScene" id=13]
+[ext_resource path="res://ImdeadArmy.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Knight.tscn" type="PackedScene" id=14]
 
 [sub_resource type="TileSet" id=1]
@@ -96,16 +96,8 @@ z_index = 2
 [node name="Boulder" type="Sprite" parent="GoblinSpawner"]
 texture = ExtResource( 12 )
 
-[node name="Imdead" parent="GoblinSpawner" instance=ExtResource( 13 )]
+[node name="ImdeadArmy" parent="GoblinSpawner" instance=ExtResource( 13 )]
 position = Vector2( 0, 12 )
-scale = Vector2( -1, 1 )
-z_index = 1
-velocity = -20
-
-[node name="Imdead2" parent="GoblinSpawner" instance=ExtResource( 13 )]
-position = Vector2( 144, 12 )
-scale = Vector2( -1, 1 )
-velocity = -20
 
 [node name="Background" type="Node2D" parent="."]
 __meta__ = {

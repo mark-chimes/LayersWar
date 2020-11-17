@@ -6,20 +6,20 @@ var cur_velocity
 var hp = 2
 
 enum State {
-	RUN,
+	WALK,
 	ATTACK,
 	DIE,
 	IDLE
 }
 
-var state = State.RUN
+var state = State.WALK
 
 func _ready():
 	cur_velocity = velocity
 	$AnimatedSprite.play("walk")
 	
 func _process(delta):
-	if state == State.RUN:
+	if state == State.WALK:
 		position.x = position.x + cur_velocity*delta	
 
 func _on_Area2D_area_entered(area):
@@ -30,10 +30,11 @@ func _on_AnimatedSprite_animation_finished():
 	if state == State.ATTACK:
 		hp -= 1
 		if hp > 0:
-			$AnimatedSprite.play("idle")
-			state = State.IDLE
+			$AnimatedSprite.play("walk")
+			state = State.WALK
 		else: 
 			$AnimatedSprite.play("death")
 			state = State.DIE
+			$KnightArea2D.queue_free()
 	elif state == State.DIE:
 		queue_free()
