@@ -18,13 +18,15 @@ export var direction = Direction.LEFT
 # var b = "text"
 var units_array = []
 var imdead = load("res://Imdead.tscn")
+var front_march_unit
+var front_attack_unit
 
 signal register_army(army)
 
 export var num_units_to_spawn = 2
 export var distance_between_spawned = 40
 
-var unit_num = 0
+var unit_num_for_name = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -40,7 +42,7 @@ func _ready():
 		
 func create_imdead(unit_pos):
 	var imdead_instance = imdead.instance()
-	imdead_instance.set_name("Imdead" + str(unit_num))
+	imdead_instance.set_name("Imdead" + str(unit_num_for_name))
 	add_child(imdead_instance)
 	imdead_instance.position = unit_pos - global_position
 #	imdead_instance.scale = Vector2( -1, 1 )
@@ -50,18 +52,30 @@ func create_imdead(unit_pos):
 	imdead_instance.connect("encounter_enemy", self, "_on_Imdead_encounter_enemy")
 	imdead_instance.connect("death", self, "_on_Imdead_death")
 	units_array.append(imdead_instance)
-	unit_num += 1
+	unit_num_for_name += 1
+	
+	if state == State.MARCH: 
+		if units_array.size() > 1:
+			imdead_instance.march_with(front_march_unit, units_array.size()-1)
+		else: 
+			imdead_instance.march()
+			front_march_unit = imdead_instance
+	elif state == State.ATTACK: 
+		if units_array.size() > 1:
+			var base_pos = front_attack_unit.position.x
+			var desired_pos = base_pos + 32*(units_array.size() - 1)
+			imdead_instance.walk_to_desired(desired_pos)
+		else: 
+			state = State.MARCH
+			imdead_instance.march()
+			front_march_unit = imdead_instance
 
 func _on_Imdead_encounter_enemy(identity):
 	if state != State.ATTACK:
 		state = State.ATTACK
-		var front_unit = units_array.pop_front()
-		front_unit.attack()
-		print("Units array: " + str(units_array))
-		print("Front unit: " + front_unit.get_name())
-		print("---")
-		
-		var base_pos = front_unit.position.x
+		front_attack_unit = units_array.pop_front()
+		front_attack_unit.attack()
+		var base_pos = front_attack_unit.position.x
 			
 		var i = 0
 		for unit in units_array:
@@ -70,8 +84,15 @@ func _on_Imdead_encounter_enemy(identity):
 			unit.walk_to_desired(desired_pos)
 	
 func _on_Imdead_death(identity):
-#	units_array.remove(units_array.find(identity))
-	state = State.MARCH
-	for unit in units_array:
-		unit.march()
+	units_array.remove(units_array.find(identity))
+	if state != State.MARCH:
+		state = State.MARCH
+		front_march_unit = units_array.pop_front()
+		front_march_unit.march()
+		var i = 0
+		for unit in units_array:
+			i += 1
+			unit.march_with(front_march_unit, i)
+		units_array.push_front(front_march_unit)
 
+# TODO What happens when they kill the enemy without losing a unit?!

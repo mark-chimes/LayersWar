@@ -21,16 +21,21 @@ var state = State.WALK
 var direction = Direction.LEFT
 
 var is_walking_to_desired = false
+
+var is_marching_to_desired = false
+var march_index = 0
+var march_leader = null
 var desired_x_pos = 0
 
 var epsilon = 4
+
 
 func _ready():	
 	walk()
 
 func _process(delta):
 	if is_walking_to_desired:
-		if abs(position.x - desired_x_pos) > 4:
+		if abs(position.x - desired_x_pos) > epsilon:
 			if position.x > desired_x_pos:
 				direction = Direction.LEFT
 			else: 
@@ -42,6 +47,26 @@ func _process(delta):
 	else: 
 		direction = army_direction
 
+	if is_marching_to_desired: 
+		if army_direction == Direction.LEFT: 
+			desired_x_pos = march_leader.position.x + march_index*32
+			if abs(position.x - desired_x_pos) > epsilon:
+				if position.x > desired_x_pos: # walking left, too far right, catch up
+					direction = Direction.LEFT
+					walk()
+				else: # walking left, too far left, run into position
+					direction = Direction.RIGHT 
+					walk()
+		if army_direction == Direction.RIGHT:  
+			desired_x_pos = march_leader.position.x - march_index*32
+			if abs(position.x - desired_x_pos) > epsilon:
+				if position.x > desired_x_pos: # walking right, too far right, run into position
+					direction = Direction.LEFT
+					walk()
+				else: # walking right, too far left, catch up
+					direction = Direction.RIGHT
+					walk()
+					
 	if direction == Direction.LEFT:
 		$AnimatedSprite.flip_h = true
 		if state == State.WALK:
@@ -87,6 +112,14 @@ func walk_to_desired(given_desired_x_pos):
 
 func march(): 
 	is_walking_to_desired = false
+	is_marching_to_desired = false
+	walk()
+
+func march_with(front_unit, my_index):
+	is_walking_to_desired = false
+	is_marching_to_desired = true
+	march_leader = front_unit
+	march_index = my_index
 	walk()
 
 func die(): 
