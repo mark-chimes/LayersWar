@@ -3,7 +3,7 @@ extends Node2D
 export var velocity = 10
 var cur_velocity
 
-var hp = 2
+export var hp = 3
 
 enum State {
 	WALK,

@@ -175,7 +175,7 @@ shape = SubResource( 10 )
 [node name="Knight" parent="." instance=ExtResource( 14 )]
 position = Vector2( 384, 336 )
 velocity = 40
-[connection signal="selected" from="Star" to="BuildingSpawner" method="_on_Star_selected"]
 [connection signal="selected" from="Star" to="Star" method="_on_Star_selected"]
+[connection signal="selected" from="Star" to="BuildingSpawner" method="_on_Star_selected"]
 [connection signal="area_entered" from="Star/Area2D" to="Star" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Star/Area2D" to="Star" method="_on_Area2D_area_exited"]
