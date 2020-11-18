@@ -3,6 +3,8 @@ extends Node2D
 signal encounter_enemy(identity, enemy)
 signal death(identity)
 
+signal imdead_attack
+
 enum Direction { 
 	LEFT, RIGHT
 }
@@ -93,14 +95,17 @@ func _on_Area2D_area_entered(area):
 		emit_signal("encounter_enemy", self, enemy)
 #	elif area_name == "ImdeadArea2D" and state == State.WALK:
 #		idle()
-		
+
 func _on_AnimatedSprite_animation_finished():
 	if state == State.ATTACK:
-		hp -= 1
-		if hp <= 0:
-			die()
-	elif state == State.DIE:
+		emit_signal("imdead_attack")
+	if state == State.DIE:
 		queue_free()
+
+func take_damage(): 
+	hp -= 1
+	if hp <= 0:
+		die()
 
 func idle(): 
 	$AnimatedSprite.play("idle")

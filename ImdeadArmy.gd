@@ -13,6 +13,7 @@ enum State {
 export var state = State.MARCH
 export var direction = Direction.LEFT
 
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -23,6 +24,7 @@ var front_attack_unit
 var cur_enemy
 
 signal register_army(army)
+signal imdead_attack
 
 export var num_units_to_spawn = 2
 export var distance_between_spawned = 40
@@ -48,6 +50,7 @@ func create_imdead(unit_pos):
 	imdead_instance.z_index = 1
 	imdead_instance.connect("encounter_enemy", self, "_on_Imdead_encounter_enemy")
 	imdead_instance.connect("death", self, "_on_Imdead_death")
+	imdead_instance.connect("imdead_attack", self, "_on_Imdead_attack")
 	units_array.append(imdead_instance)
 	unit_num_for_name += 1
 	
@@ -67,9 +70,14 @@ func create_imdead(unit_pos):
 			imdead_instance.march()
 			front_march_unit = imdead_instance
 
+func _on_Imdead_attack():
+	emit_signal("imdead_attack")
+
 func _on_Imdead_encounter_enemy(identity, enemy):
 	cur_enemy = enemy
 	enemy.connect("knight_die", self, "_on_knight_death")
+	enemy.connect("knight_attack", self, "_on_knight_attack")
+	self.connect("imdead_attack", enemy, "_on_imdead_attack")
 	if state != State.ATTACK:
 		start_attacking()
 
@@ -107,3 +115,6 @@ func start_marching():
 # TODO What happens when they kill the enemy without losing a unit?!
 func _on_knight_death():
 	start_marching()
+	
+func _on_knight_attack():
+	front_attack_unit.take_damage()

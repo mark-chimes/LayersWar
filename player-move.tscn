@@ -155,7 +155,7 @@ script = ExtResource( 5 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="Player"]
 frames = SubResource( 9 )
-frame = 1
+frame = 3
 playing = true
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -174,7 +174,7 @@ shape = SubResource( 10 )
 position = Vector2( 384, 336 )
 velocity = 40
 [connection signal="register_army" from="ImdeadArmy" to="SkeletonSpawner" method="_on_ImdeadArmy_register_army"]
-[connection signal="selected" from="Star" to="BuildingSpawner" method="_on_Star_selected"]
 [connection signal="selected" from="Star" to="Star" method="_on_Star_selected"]
+[connection signal="selected" from="Star" to="BuildingSpawner" method="_on_Star_selected"]
 [connection signal="area_entered" from="Star/Area2D" to="Star" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Star/Area2D" to="Star" method="_on_Area2D_area_exited"]

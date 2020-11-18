@@ -7,14 +7,14 @@
 [node name="UnitTest" type="Node2D"]
 
 [node name="SkeletonSpawner" parent="." instance=ExtResource( 3 )]
-position = Vector2( 548, 192 )
+position = Vector2( 448, 192 )
 
 [node name="ImdeadArmy" parent="." instance=ExtResource( 1 )]
-position = Vector2( 488, 192 )
+position = Vector2( 352, 192 )
 num_units_to_spawn = 4
 
 [node name="Knight" parent="." instance=ExtResource( 2 )]
-position = Vector2( 432, 192 )
+position = Vector2( 216, 192 )
 velocity = 40
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -23,5 +23,5 @@ current = true
 zoom = Vector2( 0.5, 0.5 )
 
 [node name="Knight2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 128, 192 )
+position = Vector2( 56, 192 )
 [connection signal="register_army" from="ImdeadArmy" to="SkeletonSpawner" method="_on_ImdeadArmy_register_army"]
