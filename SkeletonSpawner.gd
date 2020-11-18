@@ -9,4 +9,4 @@ func _on_ImdeadArmy_register_army(army):
 	imdead_army = army
 	
 func _on_SpawnTimer_timeout():
-	imdead_army.create_imdead(global_position)
+	imdead_army.create_unit(global_position)

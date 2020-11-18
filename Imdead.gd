@@ -3,7 +3,7 @@ extends Node2D
 signal encounter_enemy(identity, enemy)
 signal death(identity)
 
-signal imdead_attack
+signal unit_attack
 
 enum Direction { 
 	LEFT, RIGHT
@@ -24,7 +24,7 @@ enum State {
 	IDLE
 }
 
-export var hp = 2
+export var hp = 1
 
 export var velocity = 10
 export var army_direction = Direction.LEFT
@@ -98,7 +98,7 @@ func _on_Area2D_area_entered(area):
 
 func _on_AnimatedSprite_animation_finished():
 	if state == State.ATTACK:
-		emit_signal("imdead_attack")
+		emit_signal("unit_attack")
 	if state == State.DIE:
 		queue_free()
 
