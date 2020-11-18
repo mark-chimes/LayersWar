@@ -20,7 +20,7 @@ velocity = 40
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 312, 192 )
 current = true
-zoom = Vector2( 0.5, 0.5 )
+zoom = Vector2( 0.25, 0.25 )
 
 [node name="Knight2" parent="." instance=ExtResource( 2 )]
 position = Vector2( 56, 192 )

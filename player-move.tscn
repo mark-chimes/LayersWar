@@ -42,32 +42,26 @@
 radius = 16.0
 
 [sub_resource type="AtlasTexture" id=3]
-flags = 4
 atlas = ExtResource( 7 )
 region = Rect2( 0, 0, 50, 37 )
 
 [sub_resource type="AtlasTexture" id=4]
-flags = 4
 atlas = ExtResource( 7 )
 region = Rect2( 50, 0, 50, 37 )
 
 [sub_resource type="AtlasTexture" id=5]
-flags = 4
 atlas = ExtResource( 7 )
 region = Rect2( 100, 0, 50, 37 )
 
 [sub_resource type="AtlasTexture" id=6]
-flags = 4
 atlas = ExtResource( 7 )
 region = Rect2( 150, 0, 50, 37 )
 
 [sub_resource type="AtlasTexture" id=7]
-flags = 4
 atlas = ExtResource( 7 )
 region = Rect2( 200, 0, 50, 37 )
 
 [sub_resource type="AtlasTexture" id=8]
-flags = 4
 atlas = ExtResource( 7 )
 region = Rect2( 250, 0, 50, 37 )
 
@@ -160,7 +154,7 @@ playing = true
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
-zoom = Vector2( 0.5, 0.5 )
+zoom = Vector2( 0.25, 0.25 )
 
 [node name="PlayerArea" type="Area2D" parent="Player"]
 collision_layer = 2
@@ -174,7 +168,7 @@ shape = SubResource( 10 )
 position = Vector2( 384, 336 )
 velocity = 40
 [connection signal="register_army" from="ImdeadArmy" to="SkeletonSpawner" method="_on_ImdeadArmy_register_army"]
-[connection signal="selected" from="Star" to="Star" method="_on_Star_selected"]
 [connection signal="selected" from="Star" to="BuildingSpawner" method="_on_Star_selected"]
+[connection signal="selected" from="Star" to="Star" method="_on_Star_selected"]
 [connection signal="area_entered" from="Star/Area2D" to="Star" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Star/Area2D" to="Star" method="_on_Area2D_area_exited"]
