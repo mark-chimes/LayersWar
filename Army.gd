@@ -73,7 +73,7 @@ func _on_front_unit_attack():
 	emit_signal("front_unit_attack")
 
 func _on_unit_encounter_enemy(identity, enemy):
-	cur_enemy = enemy
+	cur_enemy = enemy#.get_army()
 	enemy.connect("unit_die", self, "_on_enemy_death")
 	enemy.connect("unit_attack", self, "_on_enemy_attack")
 	self.connect("front_unit_attack", enemy, "_on_front_enemy_attack")
