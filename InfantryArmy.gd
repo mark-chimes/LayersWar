@@ -32,9 +32,10 @@ func _process(delta):
 	for unit in units_array: 
 		var target_position
 		if direction == Direction.RIGHT:
-			target_position = $ArmyLocator.position.x + distance_between_units*unit_count
-		else: 
 			target_position = $ArmyLocator.position.x - distance_between_units*unit_count
+			print("DIRECTION RIGHT")
+		else: 
+			target_position = $ArmyLocator.position.x + distance_between_units*unit_count
 		unit.set_target_position(target_position)
 		unit_count += 1
 
@@ -42,7 +43,7 @@ func create_unit(unit_pos):
 	var unit_instance = unit_type.instance()
 	unit_instance.set_name(unit_type_name + str(unit_num_for_name))
 	add_child(unit_instance)
-	unit_instance.position = unit_pos - global_position + $ArmyLocator.position
+	unit_instance.position = unit_pos + $ArmyLocator.position
 #	unit_instance.scale = Vector2( -1, 1 )
 #	unit_instance.army_direction = direction
 #	unit_instance.velocity = 20

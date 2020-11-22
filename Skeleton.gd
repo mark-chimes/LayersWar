@@ -14,6 +14,6 @@ func _process(delta):
 			position.x = position.x + velocity*delta
 		else: 
 			position.x = position.x - velocity*delta
-		
+	
 func set_target_position(target_position): 
 	desired_x_pos = target_position

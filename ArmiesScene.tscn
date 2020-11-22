@@ -8,6 +8,7 @@
 
 [node name="InfantryArmy" parent="." instance=ExtResource( 3 )]
 direction = 1
+march_speed = 10
 
 [node name="ArmyLocator" type="Node2D" parent="InfantryArmy"]
 position = Vector2( 160, 292 )
@@ -16,6 +17,7 @@ position = Vector2( 160, 292 )
 texture = ExtResource( 2 )
 
 [node name="InfantryArmy2" parent="." instance=ExtResource( 3 )]
+march_speed = 10
 
 [node name="ArmyLocator" type="Node2D" parent="InfantryArmy2"]
 position = Vector2( 736, 292 )
