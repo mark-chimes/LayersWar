@@ -33,7 +33,6 @@ func _process(delta):
 		var target_position
 		if direction == Direction.RIGHT:
 			target_position = $ArmyLocator.position.x - distance_between_units*unit_count
-			print("DIRECTION RIGHT")
 		else: 
 			target_position = $ArmyLocator.position.x + distance_between_units*unit_count
 		unit.set_target_position(target_position)
@@ -54,4 +53,12 @@ func create_unit(unit_pos):
 	units_array.append(unit_instance)
 	unit_num_for_name += 1
 	
-	
+
+func _on_Area2D_input_event(viewport, event, shape_idx):
+	if (event is InputEventMouseButton && event.pressed):
+		if direction == Direction.LEFT: 
+			direction = Direction.RIGHT
+			print("Going right")
+		else: 
+			direction = Direction.LEFT
+			print("Going left")
