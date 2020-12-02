@@ -4,6 +4,15 @@ enum Direction {
 	LEFT, RIGHT
 }
 
+
+enum State {
+	WAIT,
+	MARCH,
+	ATTACK
+}
+
+var state = State.WAIT
+
 var units_array = []
 export (PackedScene) var unit_type = load("res://Skeleton.tscn")
 export (String) var unit_type_name = "Skeleton"
@@ -15,8 +24,8 @@ export var march_speed = 40
 var unit_num_for_name = 0
 var epsilon = 4
 
-var has_target = false
-var target_x_pos = 0
+var has_checkpoint = false
+var checkpoint_x_pos = 0
 
 func _ready():
 	spawn_initial_units()
@@ -27,24 +36,31 @@ func _process(delta):
 
 func march_army_to_target(delta): 
 	var cur_x_pos = $ArmyLocator.position.x
+	
+	if state == State.WAIT:
+		return
+	elif state == State.MARCH:
+		if has_checkpoint == false: 
+			state = State.WAIT
+			return
 		
-	if has_target == false: 
+		if abs(cur_x_pos - checkpoint_x_pos) <= epsilon:
+			has_checkpoint = false
+			state = State.WAIT
+			return
+		
+		if checkpoint_x_pos > cur_x_pos:
+			direction = Direction.RIGHT
+		else: 
+			direction = Direction.LEFT
+		
+		if direction == Direction.RIGHT:
+			$ArmyLocator.position.x = cur_x_pos + march_speed*delta
+		else: 
+			$ArmyLocator.position.x = cur_x_pos - march_speed*delta
+	elif state == State.ATTACK:
 		return
-	
-	if abs(cur_x_pos - target_x_pos) <= epsilon:
-		has_target = false
-		return
-	
-	if target_x_pos > cur_x_pos:
-		direction = Direction.RIGHT
-	else: 
-		direction = Direction.LEFT
-	
-	if direction == Direction.RIGHT:
-		$ArmyLocator.position.x = cur_x_pos + march_speed*delta
-	else: 
-		$ArmyLocator.position.x = cur_x_pos - march_speed*delta
-	
+		
 func update_units_to_walk_with_army(): 
 	var unit_count = 0
 	for unit in units_array: 
@@ -88,6 +104,7 @@ func _on_Area2D_input_event(viewport, event, shape_idx):
 			print("Going left")
 			
 
-func _on_register_target(new_target_x_pos):
-	target_x_pos = new_target_x_pos
-	has_target = true
+func _on_register_checkpoint(new_checkpoint_x_pos):
+	state = State.MARCH
+	checkpoint_x_pos = new_checkpoint_x_pos
+	has_checkpoint = true

@@ -69,5 +69,5 @@ __meta__ = {
 }
 [connection signal="input_event" from="InfantryArmy/ArmyLocator/Area2D" to="InfantryArmy" method="_on_Area2D_input_event"]
 [connection signal="input_event" from="InfantryArmy2/ArmyLocator/Area2D" to="InfantryArmy2" method="_on_Area2D_input_event"]
-[connection signal="register_target" from="Target1" to="InfantryArmy2" method="_on_register_target"]
-[connection signal="register_target" from="Target2" to="InfantryArmy" method="_on_register_target"]
+[connection signal="register_target" from="Target1" to="InfantryArmy2" method="_on_register_checkpoint"]
+[connection signal="register_target" from="Target2" to="InfantryArmy" method="_on_register_checkpoint"]
