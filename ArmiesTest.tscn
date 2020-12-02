@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Resources/gremlin2.png" type="Texture" id=1]
 [ext_resource path="res://Resources/goblin.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://InfantryArmy.gd" type="Script" id=4]
 [ext_resource path="res://Resources/Tent.png" type="Texture" id=5]
 [ext_resource path="res://Resources/Boulder.png" type="Texture" id=6]
+[ext_resource path="res://Target.gd" type="Script" id=7]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 20.3961
@@ -21,7 +22,7 @@ direction = 1
 march_speed = 20
 
 [node name="ArmyLocator" type="Node2D" parent="InfantryArmy"]
-position = Vector2( 224, 292 )
+position = Vector2( 384, 292 )
 
 [node name="goblin" type="Sprite" parent="InfantryArmy/ArmyLocator"]
 texture = ExtResource( 2 )
@@ -35,7 +36,7 @@ shape = SubResource( 1 )
 script = ExtResource( 4 )
 
 [node name="ArmyLocator" type="Node2D" parent="InfantryArmy2"]
-position = Vector2( 736, 292 )
+position = Vector2( 604, 292 )
 
 [node name="gremlin" type="Sprite" parent="InfantryArmy2/ArmyLocator"]
 texture = ExtResource( 1 )
@@ -46,7 +47,9 @@ texture = ExtResource( 1 )
 shape = SubResource( 2 )
 
 [node name="Target1" type="Node2D" parent="."]
-position = Vector2( 64, 292 )
+position = Vector2( 260, 292 )
+z_index = -2
+script = ExtResource( 7 )
 
 [node name="TentSprite" type="Sprite" parent="Target1"]
 texture = ExtResource( 5 )
@@ -55,7 +58,9 @@ __meta__ = {
 }
 
 [node name="Target2" type="Node2D" parent="."]
-position = Vector2( 940, 292 )
+position = Vector2( 672, 292 )
+z_index = -2
+script = ExtResource( 7 )
 
 [node name="BoulderSprite" type="Sprite" parent="Target2"]
 texture = ExtResource( 6 )
@@ -64,3 +69,5 @@ __meta__ = {
 }
 [connection signal="input_event" from="InfantryArmy/ArmyLocator/Area2D" to="InfantryArmy" method="_on_Area2D_input_event"]
 [connection signal="input_event" from="InfantryArmy2/ArmyLocator/Area2D" to="InfantryArmy2" method="_on_Area2D_input_event"]
+[connection signal="register_target" from="Target1" to="InfantryArmy2" method="_on_register_target"]
+[connection signal="register_target" from="Target2" to="InfantryArmy" method="_on_register_target"]

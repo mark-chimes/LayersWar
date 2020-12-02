@@ -31,13 +31,15 @@ func march_army_to_target(delta):
 	if has_target == false: 
 		return
 	
-	if abs(cur_x_pos - target_x_pos) > epsilon:
-		if target_x_pos > cur_x_pos:
-			direction = Direction.RIGHT
-		else: 
-			direction = Direction.LEFT
-
-
+	if abs(cur_x_pos - target_x_pos) <= epsilon:
+		has_target = false
+		return
+	
+	if target_x_pos > cur_x_pos:
+		direction = Direction.RIGHT
+	else: 
+		direction = Direction.LEFT
+	
 	if direction == Direction.RIGHT:
 		$ArmyLocator.position.x = cur_x_pos + march_speed*delta
 	else: 
@@ -75,7 +77,6 @@ func create_unit(unit_pos):
 #	unit_instance.connect("unit_attack", self, "_on_front_unit_attack")
 	units_array.append(unit_instance)
 	unit_num_for_name += 1
-	
 
 func _on_Area2D_input_event(viewport, event, shape_idx):
 	if (event is InputEventMouseButton && event.pressed):
@@ -85,3 +86,8 @@ func _on_Area2D_input_event(viewport, event, shape_idx):
 		else: 
 			direction = Direction.LEFT
 			print("Going left")
+			
+
+func _on_register_target(new_target_x_pos):
+	target_x_pos = new_target_x_pos
+	has_target = true
