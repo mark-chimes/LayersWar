@@ -13,18 +13,38 @@ export (Direction) var direction = Direction.LEFT
 export var march_speed = 40
 
 var unit_num_for_name = 0
+var epsilon = 4
+
+var has_target = false
+var target_x_pos = 0
 
 func _ready():
 	spawn_initial_units()
 			
 func _process(delta):
+	march_army_to_target(delta)
+	update_units_to_walk_with_army()
+
+func march_army_to_target(delta): 
+	var cur_x_pos = $ArmyLocator.position.x
+		
+	if has_target == false: 
+		return
+	
+	if abs(cur_x_pos - target_x_pos) > epsilon:
+		if target_x_pos > cur_x_pos:
+			direction = Direction.RIGHT
+		else: 
+			direction = Direction.LEFT
+
+
 	if direction == Direction.RIGHT:
-		$ArmyLocator.position.x = $ArmyLocator.position.x + march_speed*delta
+		$ArmyLocator.position.x = cur_x_pos + march_speed*delta
 	else: 
-		$ArmyLocator.position.x = $ArmyLocator.position.x - march_speed*delta
+		$ArmyLocator.position.x = cur_x_pos - march_speed*delta
 	
+func update_units_to_walk_with_army(): 
 	var unit_count = 0
-	
 	for unit in units_array: 
 		var target_position
 		if direction == Direction.RIGHT:
