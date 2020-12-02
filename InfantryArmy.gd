@@ -15,11 +15,7 @@ export var march_speed = 40
 var unit_num_for_name = 0
 
 func _ready():
-	for i in range(0, num_units_to_spawn):
-		if direction == Direction.RIGHT:
-			create_unit(global_position - Vector2(i*distance_between_units,0))
-		else: 
-			create_unit(global_position + Vector2(i*distance_between_units,0))
+	spawn_initial_units()
 			
 func _process(delta):
 	if direction == Direction.RIGHT:
@@ -38,6 +34,13 @@ func _process(delta):
 		unit.set_target_position(target_position)
 		unit_count += 1
 
+func spawn_initial_units():
+	for i in range(0, num_units_to_spawn):
+		if direction == Direction.RIGHT:
+			create_unit(global_position - Vector2(i*distance_between_units,0))
+		else: 
+			create_unit(global_position + Vector2(i*distance_between_units,0))
+
 func create_unit(unit_pos):
 	var unit_instance = unit_type.instance()
 	unit_instance.set_name(unit_type_name + str(unit_num_for_name))
@@ -45,7 +48,7 @@ func create_unit(unit_pos):
 	unit_instance.position = unit_pos + $ArmyLocator.position
 #	unit_instance.scale = Vector2( -1, 1 )
 #	unit_instance.army_direction = direction
-#	unit_instance.velocity = 20
+	unit_instance.velocity = march_speed
 #	unit_instance.z_index = 1
 #	unit_instance.connect("encounter_enemy", self, "_on_unit_encounter_enemy")
 #	unit_instance.connect("death", self, "_on_unit_death")
