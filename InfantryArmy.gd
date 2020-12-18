@@ -4,7 +4,6 @@ enum Direction {
 	LEFT, RIGHT
 }
 
-
 enum State {
 	WAIT,
 	MARCH,
