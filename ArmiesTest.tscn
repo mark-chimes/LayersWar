@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Resources/gremlin2.png" type="Texture" id=1]
 [ext_resource path="res://Resources/goblin.png" type="Texture" id=2]
 [ext_resource path="res://InfantryArmy.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ArmiesController.gd" type="Script" id=4]
 [ext_resource path="res://Resources/Tent.png" type="Texture" id=5]
 [ext_resource path="res://Resources/Boulder.png" type="Texture" id=6]
 [ext_resource path="res://Target.gd" type="Script" id=7]
@@ -15,8 +16,11 @@ radius = 20.3961
 
 [node name="ArmiesTest" type="Node2D"]
 
+[node name="ArmiesController" type="Node" parent="."]
+script = ExtResource( 4 )
+
 [node name="InfantryArmy" parent="." instance=ExtResource( 3 )]
-direction = 1
+startDirection = 1
 march_speed = 20
 
 [node name="ArmyLocator" type="Node2D" parent="InfantryArmy"]
@@ -31,6 +35,7 @@ texture = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="InfantryArmy2" parent="." instance=ExtResource( 3 )]
+team = 2
 
 [node name="ArmyLocator" type="Node2D" parent="InfantryArmy2"]
 position = Vector2( 604, 292 )
@@ -66,7 +71,9 @@ texture = ExtResource( 6 )
 __meta__ = {
 "_edit_lock_": true
 }
+[connection signal="register_army" from="InfantryArmy" to="ArmiesController" method="_register_army"]
 [connection signal="input_event" from="InfantryArmy/ArmyLocator/Area2D" to="InfantryArmy" method="_on_Area2D_input_event"]
+[connection signal="register_army" from="InfantryArmy2" to="ArmiesController" method="_register_army"]
 [connection signal="input_event" from="InfantryArmy2/ArmyLocator/Area2D" to="InfantryArmy2" method="_on_Area2D_input_event"]
 [connection signal="register_target" from="Target1" to="InfantryArmy2" method="_on_register_checkpoint"]
 [connection signal="register_target" from="Target2" to="InfantryArmy" method="_on_register_checkpoint"]
