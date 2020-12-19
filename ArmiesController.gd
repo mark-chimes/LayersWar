@@ -8,8 +8,8 @@ const army_type_script = preload("res://InfantryArmy.gd")
 var human_army_array = []
 var orc_army_array = []
 
-const army_dist = 30
-
+const attack_prep_dist = 50
+const attack_action_dist = 20
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -30,8 +30,14 @@ func check_army_attacks():
 		var human_position = human_army.get_position()
 		for orc_army in orc_army_array: 
 			var orc_position =  orc_army.get_position()
-			if abs(human_position - orc_position) < army_dist: 
-				human_army.start_attack()
-				orc_army.start_attack()
+			if abs(human_position - orc_position) < attack_prep_dist: 
+				if human_position < orc_position: 
+					human_army.start_attack(human_position, true)
+					orc_army.start_attack(human_position + attack_action_dist, false)
+				else: 
+					orc_army.start_attack(orc_position, true)
+					human_army.start_attack(orc_position + attack_action_dist, false)
+				
+
 				# TODO differentiate first attacker? 
 		
